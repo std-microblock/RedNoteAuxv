@@ -1,0 +1,24 @@
+{
+  "base": {
+    "version": "1.0.0",
+    "fridaVersion": "17.5.1",
+    "entry": "main.js",
+    "platform": "arm64-v8a"
+  },
+  "xposed": {
+    "inherit": "base",
+    "type": "xposed",
+    "sign": {
+      "keystore": "Y:\\Users\\mbcloud\\.android\\debug.keystore",
+      "keystorePass": "android",
+      "keystoreAlias": "androiddebugkey"
+    },
+    "xposed": {
+      "packageName": "cc.microblock.rednoteauxv",
+      "name": "RedNoteAuxiliary",
+      "icon": "res\\icon.png",
+      "scope": "com.xingin.xhs",
+      "description": "小红书增强插件"
+    }
+  }
+}
