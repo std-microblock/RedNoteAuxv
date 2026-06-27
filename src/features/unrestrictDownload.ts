@@ -43,7 +43,7 @@ function hookIsDisabled() {
                 if (rt.className !== "java.lang.Boolean") continue;
                 try {
                     ov.implementation = function () {
-                        return false; // 返回 Boolean.FALSE
+                        return Java.use("java.lang.Boolean").FALSE.value; // 返回 Boolean.FALSE
                     };
                     log("[dl] hooked u68.l." + name + "() -> disable=false");
                     hooked = true;

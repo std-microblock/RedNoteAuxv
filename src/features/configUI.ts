@@ -61,7 +61,6 @@ function ensureActionBarButton(activity: any) {
                 if (!header) { warn("[cfg] ActionBarCommon instance not found"); return; }
                 const headerC = Java.cast(header, ActionBarCommon);
                 headerC.setRightText(Java.use("java.lang.String").$new(CFG_TITLE));
-                // 拿 rightTextView,直接 setOnClickListener(不碰 RxJava)
                 const rightTv = headerC.getRightTextview();
                 if (!rightTv) { warn("[cfg] rightTextview null"); return; }
                 rightTv.setOnClickListener(Java.registerClass({
