@@ -11,8 +11,86 @@ export const feedDateSort: Feature = {
   enable(cfg) {
     return cfg.feedSortByDateAsc;
   },
-  install() {},
+  install() {
+    hookMultiTypeAdapterSetItems();
+  },
 };
+
+/**
+ * hook MultiTypeAdapter.setItems(List):若 list 元素是 NoteItemBean,
+ * 按 timestamp / createTime / postTime 升序(早的在前)重排后替换。
+ * 非 NoteItemBean 列表(搜索/相册/评论等)直接放行。
+ */
+let sortHooked = false;
+function hookMultiTypeAdapterSetItems() {
+  if (sortHooked) return;
+  const Adapter = tryUse("com.drakeet.multitype.MultiTypeAdapter");
+  if (!Adapter) {
+    warn("[feedSort] MultiTypeAdapter not found");
+    return;
+  }
+  try {
+    const ov = Adapter.setItems.overload("java.util.List");
+    ov.implementation = function (list: any) {
+      console.log(
+        "[feedSort] MultiTypeAdapter.setItems called, list.size=" +
+          (list ? list.size() : "null"),
+      );
+      try {
+        const rewritten = maybeSortFeed(list);
+        if (rewritten) return ov.call(this, rewritten);
+      } catch (e) {
+        warn("[feedSort] sort failed:", String(e));
+      }
+      return ov.call(this, list);
+    };
+    sortHooked = true;
+    log("[feedSort] hooked MultiTypeAdapter.setItems(List)");
+  } catch (e) {
+    warn("[feedSort] hook setItems failed:", String(e));
+  }
+}
+
+function maybeSortFeed(list: any): any | null {
+  if (!list || list.size === undefined) return null;
+  const size = list.size();
+  if (size === 0) return null;
+
+  const NoteItemBean = tryUse(NOTE_ITEM_BEAN);
+  if (!NoteItemBean) return null;
+
+  let first: any = null;
+  for (let i = 0; i < size; i++) {
+    const e = list.get(i);
+    if (e !== null) {
+      first = e;
+      break;
+    }
+  }
+  if (!first) return null;
+
+  console.log("[feedSort] first element class: " + first.getClass().getName());
+  if (first.getClass().getName() !== NOTE_ITEM_BEAN) return null;
+
+  const arr: any[] = [];
+  for (let i = 0; i < size; i++) {
+    try {
+      arr.push(
+        Java.cast(list.get(i), Java.use("com.xingin.entities.NoteItemBean")),
+      );
+    } catch (e) {
+      warn("[feedSort] cast NoteItemBean failed:", String(e));
+    }
+  }
+  arr.sort(
+    (a, b) => parseInt(b.timestamp.value) - parseInt(a.timestamp.value) ,
+  );
+
+  const ArrayList = Java.use("java.util.ArrayList");
+  const out = ArrayList.$new();
+  for (const item of arr) out.add(item);
+  return out;
+}
 
 export const feedShowDate: Feature = {
   key: "feedShowDate",
