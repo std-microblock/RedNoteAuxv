@@ -16,7 +16,7 @@ import type { Feature } from "./registry-interface";
  *
  * 配置存储:文件。实时生效:保存后对新开的 feature 立即 install。
  */
-const CFG_TITLE = "插件";
+const CFG_TITLE = "Auxv 配置";
 
 export const configUI: Feature = {
     key: "copyUnrestrict", // 占位;configUI 总是安装,enable 永真
@@ -131,7 +131,7 @@ function showConfigDialog(activity: any) {
                 },
             }).$new(),
         );
-        builder.setPositiveButton(Java.use("java.lang.String").$new("保存并实时生效"), Java.registerClass({
+        builder.setPositiveButton(Java.use("java.lang.String").$new("保存"), Java.registerClass({
             name: "cc.microblock.rednoteauxv.CfgSave" + nonce(),
             implements: [Java.use("android.content.DialogInterface$OnClickListener")],
             methods: {
