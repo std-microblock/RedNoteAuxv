@@ -157,9 +157,9 @@ function featureLabels(): Item[] {
         downloadNoWatermark: "下载去水印",
         unrestrictDownload: "解除下载限制",
         feedSortByDateAsc: "信息流按日期升序(早的在前)",
-        feedShowDate: "把日期写在帖子上",
+        feedShowDate: "“发现”页显示帖子时间",
         autoPreloadOnRefresh: "自动预载刷新",
-        hideLikeRedDot: "点赞红点消掉",
+        hideLikeRedDot: "消息 Tab 不显示点赞红点",
     };
     return (Object.keys(map) as (keyof FeatureConfig)[]).map(k => ({ key: k, label: map[k] }));
 }
