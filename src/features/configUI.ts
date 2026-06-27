@@ -70,7 +70,7 @@ function ensureActionBarButton(activity: any) {
                     methods: {
                         onClick(_v: any) {
                             log("[cfg] button clicked");
-                            try { showConfigDialog(activity); } catch (e) { warn("[cfg] onClick:", String(e), (e as any).stack); }
+                            try { showConfigDialog(act); } catch (e) { warn("[cfg] onClick:", String(e), (e as any).stack); }
                         },
                     },
                 }).$new());
