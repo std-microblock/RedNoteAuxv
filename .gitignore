@@ -1,2 +1,6 @@
 node_modules
 /main.js
+/base.apk
+/jadx_out/
+/fripack/
+/base/

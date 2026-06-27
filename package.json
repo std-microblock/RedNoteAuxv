@@ -8,6 +8,8 @@
     "frida-java-bridge": "^7.0.13"
   },
   "scripts": {
-    "build": "frida-compile src/main.ts -o main.js"
+    "build": "frida-compile src/main.ts -o main.js",
+    "watch": "frida-compile src/main.ts -w -o main.js",
+    "logcat": "adb logcat FriPackInject:* *:F linker:E"
   }
 }
